@@ -1,0 +1,23 @@
+{
+  "name": "com.riomaster.analytics",
+  "version": "1.0.0",
+  "displayName": "Riomaster Analytics",
+  "description": "Game analytics SDK for Riomaster Analytics service. Track events, player sessions, economy, progression and more.",
+  "unity": "2021.3",
+  "author": {
+    "name": "Happy Hour Games",
+    "url": "https://github.com/Happy-Hour-Games"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Happy-Hour-Games/Riomaster-Analytics-Unity-SDK.git"
+  },
+  "keywords": [
+    "analytics",
+    "telemetry",
+    "events",
+    "riomaster",
+    "game-analytics"
+  ],
+  "license": "MIT"
+}
