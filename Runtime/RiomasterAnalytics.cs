@@ -242,24 +242,100 @@ namespace Riomaster.Analytics
 
         #endregion
 
-        #region Convenience Methods — Progression
+        #region Convenience Methods — Progression / Level Tracking
 
-        /// <summary>Track level start</summary>
+        /// <summary>
+        /// Track level start. Call when the player begins a level.
+        /// </summary>
+        /// <param name="levelId">Sequential level number (1, 2, 3...)</param>
+        /// <param name="levelName">Display name of the level</param>
+        /// <param name="levelType">Type: tutorial, normal, boss, bonus, etc.</param>
+        public void TrackLevelStart(int levelId, string levelName, string levelType = "normal")
+        {
+            var props = new Dictionary<string, object>
+            {
+                { "level_id", levelId },
+                { "level_name", levelName },
+                { "level_type", levelType },
+            };
+            Track("level_start", "progression", props);
+        }
+
+        /// <summary>
+        /// Track level complete (win). Call when the player successfully finishes a level.
+        /// </summary>
+        /// <param name="levelId">Sequential level number</param>
+        /// <param name="levelName">Display name of the level</param>
+        /// <param name="levelType">Type: tutorial, normal, boss, bonus, etc.</param>
+        /// <param name="durationSeconds">Time spent in the level (seconds)</param>
+        public void TrackLevelComplete(int levelId, string levelName, string levelType = "normal", float durationSeconds = 0f)
+        {
+            var props = new Dictionary<string, object>
+            {
+                { "level_id", levelId },
+                { "level_name", levelName },
+                { "level_type", levelType },
+                { "duration", durationSeconds },
+            };
+            Track("level_complete", "progression", props, durationSeconds);
+        }
+
+        /// <summary>
+        /// Track level fail. Call when the player loses/fails a level.
+        /// </summary>
+        /// <param name="levelId">Sequential level number</param>
+        /// <param name="levelName">Display name of the level</param>
+        /// <param name="levelType">Type: tutorial, normal, boss, bonus, etc.</param>
+        /// <param name="durationSeconds">Time spent before failing (seconds)</param>
+        public void TrackLevelFail(int levelId, string levelName, string levelType = "normal", float durationSeconds = 0f)
+        {
+            var props = new Dictionary<string, object>
+            {
+                { "level_id", levelId },
+                { "level_name", levelName },
+                { "level_type", levelType },
+                { "duration", durationSeconds },
+            };
+            Track("level_fail", "progression", props, durationSeconds);
+        }
+
+        /// <summary>
+        /// Track level revive. Call when the player uses a revive/continue after failing.
+        /// </summary>
+        /// <param name="levelId">Sequential level number</param>
+        /// <param name="levelName">Display name of the level</param>
+        /// <param name="levelType">Type: tutorial, normal, boss, bonus, etc.</param>
+        /// <param name="reviveMethod">How they revived: ad, gem, coin, etc.</param>
+        public void TrackLevelRevive(int levelId, string levelName, string levelType = "normal", string reviveMethod = "")
+        {
+            var props = new Dictionary<string, object>
+            {
+                { "level_id", levelId },
+                { "level_name", levelName },
+                { "level_type", levelType },
+                { "revive_method", reviveMethod },
+            };
+            Track("level_revive", "progression", props);
+        }
+
+        // Keep old simple overloads for backward compatibility
+
+        /// <summary>Track level start (simple)</summary>
         public void TrackLevelStart(string levelName)
         {
-            Track("level_start", "progression", null, 0, levelName);
+            TrackLevelStart(0, levelName, "normal");
         }
 
-        /// <summary>Track level complete with time spent</summary>
+        /// <summary>Track level complete (simple)</summary>
         public void TrackLevelComplete(string levelName, float timeSeconds = 0f)
         {
-            Track("level_complete", "progression", null, timeSeconds, levelName);
+            TrackLevelComplete(0, levelName, "normal", timeSeconds);
         }
 
-        /// <summary>Track level fail</summary>
+        /// <summary>Track level fail (simple)</summary>
         public void TrackLevelFail(string levelName, float timeSeconds = 0f)
         {
-            Track("level_fail", "progression", null, timeSeconds, levelName);
+            TrackLevelFail(0, levelName, "normal", timeSeconds);
         }
 
         #endregion
